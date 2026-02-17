@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Any, TypedDict
 from typing_extensions import NotRequired
 
-from homeassistant.components.dhcp import DhcpServiceInfo
+from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
 #from typing import Final, Protocol, TypedDict
 
 

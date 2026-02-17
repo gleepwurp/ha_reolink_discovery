@@ -1,6 +1,6 @@
-Developer information
+# Developer information
 
-Update #3:
+## Update #3
 
 Moved discovery config push to two places, async_step_integration_discovery and async_step_dhcp.
 
@@ -9,13 +9,13 @@ Docs point to async_step_discovery being deprecated and the defaults for that an
 Added async_step_dhcp (and emulated dhcp push) to support the "official" ReoLink integration without code
 changes to that integration. using async_step_integration_discovery is preferred.
 
-Update #2:
+## Update #2
 
 The discovery signal approach is still valid, but I also added config_flow push discovery as well.
 
 If you add the following to your integration, you can intercept and handle new device discoverys on the users network.
 
-```
+```python
     async def async_step_discovery(self, discovery_info: DiscoveryInfoType):
         return await super().async_step_discovery(discovery_info)
 
@@ -28,7 +28,7 @@ the discovery_info will be a dict that follows the structure of DiscoveredDevice
 <del>
 The current output of the component is a follows
 
-```
+```python
 {
     "event_type": "reolink_discovery",
     "data": {
@@ -42,15 +42,21 @@ The current output of the component is a follows
 ```
 </del>
 
-Update: the component has been re-worked to use the discovery helper and dispatching instead of events, this should be lower overhead as no dict->json->dict conversion will be happening. the data poriton is the same and the service is "reolink_discovery"
+## Update
+
+The component has been re-worked to use the discovery helper and dispatching instead of events, this should be lower overhead as no dict->json->dict conversion will be happening. the data poriton is the same and the service is "reolink_discovery"
 use
-```
+
+```python
 homeassistant.helpers.discovery.async_listener("reolink_discovery", __callback)
 ```
+
 here callback is
-```
+
+```python
 async def __callback(service:str, info:DiscoveryIntoType)->None:
 ```
+
 set this up in async_setup to make sure it is loaded as soon as the component is.
 
 I also added an option for a notifier, the name entered into this option is the component that will be notified on each event.
@@ -59,7 +65,7 @@ This means that in the discovery system will attemp to load that component befor
 
 the python typedef for the above data block is:
 
-```
+```python
 class DiscoveredDeviceType(TypedDict):
     """Discovered Device"""
 
@@ -72,7 +78,7 @@ class DiscoveredDeviceType(TypedDict):
 
 Notes:
 
-IP and mac are guarenteed because of the UDP message, most devices I have tested with provide name and uuid, though it is possible some could not (they have a lot of different devices).
+IP and mac are garanteed because of the UDP message, most devices I have tested with provide name and uuid, though it is possible some could not (they have a lot of different devices).
 
 The ident field is just a guess, I only have one device that provides data in that field, and it is not a web enabled device.
 So far seeing IPC in that field mean a web based component can ingore the device.
